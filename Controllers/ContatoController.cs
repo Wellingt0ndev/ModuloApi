@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ModuloAPI.Context;
 using ModuloAPI.Entities;
@@ -23,7 +19,7 @@ namespace ModuloAPI.Controllers
         {
             _context.Add(contato);
             _context.SaveChanges();
-            return Ok(contato);
+            return CreatedAtAction(nameof(ObterPorId), new {id = contato.Id}, contato);
         }
 
         [HttpGet("{id}")]
@@ -34,6 +30,13 @@ namespace ModuloAPI.Controllers
             return NotFound();
 
             return Ok(contato);
+        }
+
+        [HttpGet("ObterPorNome")]
+        public IActionResult ObterPorNome(string nome)
+        {
+            var contatos = _context.Contatos.Where(x => x.Nome.Contains(nome));
+            return Ok(contatos);
         }
 
         [HttpPut("{id}")]
